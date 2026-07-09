@@ -94,10 +94,10 @@ display(spark.sql(f"""
 # MAGIC 
 # MAGIC ### VS Code 拡張 + Databricks Connect
 # MAGIC 
-# MAGIC ローカル開発環境でも Databricks Connect を使えば:
-# MAGIC - VS Code からサーバレスコンピュートに接続
-# MAGIC - Genie Code の AI 支援付き開発
-# MAGIC - テスト・デバッグもローカルで完結
+# MAGIC ローカル開発環境でも Databricks Connect を使えば、VS Code からサーバレスコンピュートに接続し、
+# MAGIC AI 支援付き開発・テスト・デバッグをローカルで完結できます。
+# MAGIC 
+# MAGIC > 📖 詳細手順: [`docs/vscode_databricks_connect.md`](../docs/vscode_databricks_connect.md)
 
 # COMMAND ----------
 
