@@ -18,6 +18,10 @@
 
 # COMMAND ----------
 
+# MAGIC %pip install databricks-vectorsearch databricks-sdk --upgrade --quiet
+
+# COMMAND ----------
+
 # MAGIC %run ./config
 
 # COMMAND ----------
