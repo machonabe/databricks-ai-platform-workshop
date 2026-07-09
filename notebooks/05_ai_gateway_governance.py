@@ -19,9 +19,10 @@
 
 # COMMAND ----------
 
-# ⯅ 自分の環境に合わせて変更
-CATALOG = "<catalog>"
-SCHEMA = "<schema>"
+# MAGIC %run ./config
+
+# COMMAND ----------
+
 ENDPOINT_NAME = "databricks-meta-llama-3-3-70b-instruct"  # FE で利用可能な FMAPI エンドポイント
 
 # COMMAND ----------

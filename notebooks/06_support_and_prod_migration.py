@@ -14,9 +14,7 @@
 
 # COMMAND ----------
 
-# ⯅ 自分の環境に合わせて変更
-CATALOG = "<catalog>"
-SCHEMA = "<schema>"
+# MAGIC %run ./config
 
 # COMMAND ----------
 
