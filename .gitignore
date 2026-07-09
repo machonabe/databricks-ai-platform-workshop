@@ -1,0 +1,6 @@
+.venv/
+omnigent/
+.env
+__pycache__/
+*.pyc
+*.csv
