@@ -14,19 +14,31 @@
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ## Step 1: 環境変数の設定
+# MAGIC ## Step 1: ハンズオン用カタログ・スキーマの決定
 # MAGIC 
-# MAGIC 以下の `CATALOG` と `SCHEMA` を自分の環境に合わせて設定してください。
+# MAGIC Free Edition ではワークスペースに既定のカタログが割り当てられています。
+# MAGIC そのカタログ内にハンズオン用のスキーマを作成します。
+# MAGIC 
+# MAGIC > **注意**: FE では新規カタログの作成が制限される場合があります。
+# MAGIC その場合は `current_catalog()` で返る既定カタログをそのまま使ってください。
 
 # COMMAND ----------
 
-# ⯅ 自分の環境に合わせて変更
-CATALOG = "<catalog>"
-SCHEMA = "<schema>"
+# まず現在の既定カタログを確認
+current_cat = spark.sql("SELECT current_catalog()").collect()[0][0]
+print(f"現在の既定カタログ: {current_cat}")
+
+# COMMAND ----------
+
+# ハンズオン用の設定
+# 既定カタログをそのまま使い、スキーマを新規作成します
+CATALOG = current_cat  # FE の既定カタログをそのまま使用
+SCHEMA = "ai_workshop"  # ハンズオン用スキーマ
 VOLUME_NAME = "uploads"
 
 print(f"CATALOG: {CATALOG}")
 print(f"SCHEMA:  {SCHEMA}")
+print(f"→ この値を他のノートブックの CATALOG/SCHEMA にも設定してください")
 
 # COMMAND ----------
 
@@ -39,12 +51,23 @@ print(f"SCHEMA:  {SCHEMA}")
 
 # COMMAND ----------
 
-spark.sql(f"CREATE CATALOG IF NOT EXISTS {CATALOG}")
+# FE では CREATE CATALOG が制限される場合があるため、既定カタログ内に Schema と Volume を作成
+try:
+    spark.sql(f"CREATE CATALOG IF NOT EXISTS {CATALOG}")
+    print(f"✅ Catalog 確認/作成: {CATALOG}")
+except Exception as e:
+    # FE では既定カタログが既に存在するのでエラーでも続行可能
+    print(f"ℹ️ Catalog は既存または作成権限なし（既定カタログを使用）: {e}")
+
 spark.sql(f"CREATE SCHEMA IF NOT EXISTS {CATALOG}.{SCHEMA}")
 spark.sql(f"CREATE VOLUME IF NOT EXISTS {CATALOG}.{SCHEMA}.{VOLUME_NAME}")
 
 print(f"✅ 環境払出完了: {CATALOG}.{SCHEMA}")
 print(f"   Volume: /Volumes/{CATALOG}/{SCHEMA}/{VOLUME_NAME}")
+print()
+print(f"📌 他のノートブックでは以下を先頭に設定してください:")
+print(f'   CATALOG = "{CATALOG}"')
+print(f'   SCHEMA = "{SCHEMA}"')
 
 # COMMAND ----------
 
