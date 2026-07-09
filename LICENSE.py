@@ -1,1 +1,0 @@
-# Internal workshop material
