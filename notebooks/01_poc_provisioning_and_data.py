@@ -7,10 +7,6 @@
 # MAGIC - サンプルデータの生成と Delta テーブル化
 # MAGIC - 「簡易申請書 → 即時払出」のアナロジーを体験
 # MAGIC 
-# MAGIC ## SPARK 施策
-# MAGIC - ① 即払出: 申請から数分で環境が整う
-# MAGIC - ② 標準環境: ノート + SQL エディタが標準ツール
-# MAGIC 
 # MAGIC ## FE 制約
 # MAGIC - 外部ストレージ接続不可 → マネージド Volume/テーブルで代替
 # MAGIC - DBFS 不可 → UC Volume を使用

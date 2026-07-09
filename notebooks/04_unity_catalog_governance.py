@@ -7,8 +7,6 @@
 # MAGIC - 行フィルタ・列マスキング・タグ付け・ ABAC
 # MAGIC - 「捨てない・重ねない・コピーしない」= データを動かさず in-place にガバナンスを重ねる
 # MAGIC 
-# MAGIC ## SPARK 施策: ⑤ 安全な開発/本番
-# MAGIC 
 # MAGIC ## FE 制約
 # MAGIC - RLS/マスキング/ABAC はサーバレスで動作 ✓
 # MAGIC - SCIM/SSO/アカウントポリシーは FE 不可 → ワークスペース内グループ + GRANT で概念実演

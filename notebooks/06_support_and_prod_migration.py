@@ -8,8 +8,6 @@
 # MAGIC - Declarative Automation Bundles (DABs) での移行の型
 # MAGIC - SDLC/AI チェックシート
 # MAGIC 
-# MAGIC ## SPARK 施策: ③ 寄り添い / 本番移行
-# MAGIC 
 # MAGIC ## FE 制約
 # MAGIC - ジョブ同時 5
 # MAGIC - Lakeflow パイプライン各タイプ 1

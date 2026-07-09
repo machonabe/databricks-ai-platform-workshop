@@ -8,10 +8,6 @@
 # MAGIC - AI/BI ダッシュボードで使用状況可視化
 # MAGIC - サーバレス使用タグでコスト按分
 # MAGIC 
-# MAGIC ## SPARK 施策
-# MAGIC - ⑧ ガバナンス仕組み: AI Gateway で一元管理
-# MAGIC - ④ コスト: 使用状況可視化 + タグで按分
-# MAGIC 
 # MAGIC ## FE 制約
 # MAGIC - 推論テーブルはワークスペース内 UC で可 ✓
 # MAGIC - **全社 `system.billing.usage` FinOps と Genie 予算は FE 不可** → スクショ/口頭で説明

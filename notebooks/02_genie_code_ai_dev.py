@@ -7,9 +7,6 @@
 # MAGIC - UC メタデータ駆動（テーブルコメント、リネージ）
 # MAGIC - skills / instructions / MCP でナレッジ注入
 # MAGIC 
-# MAGIC ## SPARK 施策
-# MAGIC - ② 標準環境: ノート + SQL エディタ + Genie Code が標準ツール
-# MAGIC - ⑦ AIドリブン: AI がコード生成・分析を支援
 
 # COMMAND ----------
 

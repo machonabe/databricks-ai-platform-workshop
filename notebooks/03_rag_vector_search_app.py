@@ -8,8 +8,6 @@
 # MAGIC - FMAPI で回答生成
 # MAGIC - Databricks Apps で簡易チャット UI を公開
 # MAGIC 
-# MAGIC ## SPARK 施策: ⑥ RAG
-# MAGIC 
 # MAGIC ## FE 制約
 # MAGIC - Vector Search: 1 エンドポイント / 1 ユニット、Direct Vector Access 不可
 # MAGIC - → **Delta Sync インデックス + マネージド埋め込み**を使用
