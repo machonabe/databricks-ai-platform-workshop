@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 
 # --- Config ---
 GENIE_SPACE_ID = os.environ.get("GENIE_SPACE_ID", "")
-FMAPI_MODEL = os.environ.get("FMAPI_MODEL", "databricks-claude-sonnet-4")
+FMAPI_MODEL = os.environ.get("FMAPI_MODEL", "databricks-meta-llama-3-3-70b-instruct")
 CATALOG = os.environ.get("CATALOG", "main")
 SCHEMA = os.environ.get("SCHEMA", "ai_workshop")
 
@@ -157,79 +157,6 @@ def vehicle_agent(question: str) -> tuple[str, str, str | None]:
     else:
         answer = _call_fmapi_with_context(question)
         return answer, "FMAPI", None
-
-
-def _query_tables_directly(question: str) -> dict | None:
-    """Genie 失敗時のフォールバック: LLM に SQL を生成させて直接実行"""
-    try:
-        # 1. LLM に SQL を生成させる
-        schema_info = (
-            f"\nテーブル: {CATALOG}.{SCHEMA}.vehicles"
-            f"\n  カラム: vehicle_id, model, battery_capacity_kwh, manufactured_year"
-            f"\nテーブル: {CATALOG}.{SCHEMA}.trip_logs"
-            f"\n  カラム: trip_id, vehicle_id, trip_date, distance_km, energy_consumed_kwh, "
-            f"avg_speed_kmh, max_speed_kmh, regen_energy_kwh, battery_temp_start_c, "
-            f"battery_temp_end_c, efficiency_km_per_kwh"
-        )
-        sql_gen_prompt = (
-            f"以下のテーブルスキーマを使って、質問に答える SQL を Databricks SQL 方言で書いてください。"
-            f"SQL のみを出力し、説明は不要です。\n"
-            f"{schema_info}\n\n質問: {question}\nSQL:"
-        )
-        resp = w.serving_endpoints.query(
-            name=FMAPI_MODEL,
-            messages=[ChatMessage(role=ChatMessageRole.USER, content=sql_gen_prompt)],
-            max_tokens=300
-        )
-        generated_sql = (resp.choices[0].message.content or "").strip()
-        # ```sql ... ``` ブロックを除去
-        if generated_sql.startswith("```"):
-            generated_sql = generated_sql.split("\n", 1)[-1].rsplit("```", 1)[0].strip()
-        if not generated_sql.upper().startswith("SELECT"):
-            return None
-        logger.info(f"Generated SQL: {generated_sql}")
-
-        # 2. SQL Statement API で実行
-        from databricks.sdk.service.sql import StatementState
-        warehouses = list(w.warehouses.list())
-        if not warehouses:
-            return None
-        wh_id = warehouses[0].id
-
-        stmt = w.statement_execution.execute_statement(
-            warehouse_id=wh_id,
-            statement=generated_sql,
-            wait_timeout="30s"
-        )
-        if stmt.status.state != StatementState.SUCCEEDED:
-            logger.error(f"SQL execution failed: {stmt.status}")
-            return None
-
-        # 3. 結果を整形
-        cols = [c.name for c in stmt.manifest.schema.columns]
-        rows = stmt.result.data_array[:10] if stmt.result and stmt.result.data_array else []
-        if not rows:
-            return None
-
-        rows_str = "\n".join([str(dict(zip(cols, r))) for r in rows])
-        context = f"SQLクエリ結果:\n{rows_str}"
-
-        # 4. LLM で要約
-        summarize_prompt = (
-            "以下のデータを元に、質問に日本語で分かりやすく回答してください。"
-            "数値はそのまま使用してください。\n\n"
-            f"質問: {question}\n\nデータ: {context}"
-        )
-        resp2 = w.serving_endpoints.query(
-            name=FMAPI_MODEL,
-            messages=[ChatMessage(role=ChatMessageRole.USER, content=summarize_prompt)],
-            max_tokens=500
-        )
-        answer = resp2.choices[0].message.content or f"データ: {context[:300]}"
-        return {"answer": answer, "sql": generated_sql}
-    except Exception as e:
-        logger.error(f"SQL direct query failed: {e}")
-        return None
 
 
 def _call_fmapi_with_context(question: str) -> str:
