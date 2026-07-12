@@ -1,0 +1,17 @@
+command:
+  - uvicorn
+  - app:app
+  - --host
+  - 0.0.0.0
+  - --port
+  - "8000"
+
+env:
+  - name: GENIE_SPACE_ID
+    value: "01f17e2d94cd166f833af4eb2fd94666"
+  - name: FMAPI_MODEL
+    value: "databricks-claude-sonnet-4"
+  - name: CATALOG
+    value: "main"
+  - name: SCHEMA
+    value: "ai_workshop"
